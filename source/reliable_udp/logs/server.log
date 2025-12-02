@@ -1,0 +1,10 @@
+[2025-12-01 04:50:11] Server listening on 127.0.0.1:9001
+[2025-12-01 04:50:15] RECEIVED from ('127.0.0.1', 9000) | seq=1 payload=b'hello'
+[2025-12-01 04:50:15] SENT ACK to ('127.0.0.1', 9000) | ack=1
+[2025-12-01 04:50:21] RECEIVED from ('127.0.0.1', 9000) | seq=2 payload=b'this is a test!'
+[2025-12-01 04:50:21] SENT ACK to ('127.0.0.1', 9000) | ack=2
+[2025-12-01 04:50:31] RECEIVED from ('127.0.0.1', 9000) | seq=3 payload=b'wow, so cool!'
+[2025-12-01 04:50:31] SENT ACK to ('127.0.0.1', 9000) | ack=3
+[2025-12-01 04:50:37] RECEIVED from ('127.0.0.1', 9000) | seq=4 payload=b'SENT'
+[2025-12-01 04:50:37] SENT ACK to ('127.0.0.1', 9000) | ack=4
+[2025-12-01 04:55:04] Server stopped cleanly.

@@ -4,7 +4,6 @@ import argparse
 import random
 import time
 
-from samba.dcerpc.smbXsrv import client
 
 from logger import make_logger
 
@@ -71,14 +70,14 @@ def main():
 
                 # drop?
                 if random.randint(1, 100) <= args.client_drop:
-                    log("DROP (client→server)")
+                    log("DROP (client -> server)")
                     continue
 
                 # delay?
                 if args.client_delay:
-                    delay = random.uniform(args.client_delay_time_min,
-                                           args.client_delay_time_max)
-                    log(f"DELAY {delay:.3f}s (client→server)")
+                    delay = random.uniform((args.client_delay_time_min/1000),
+                                           (args.client_delay_time_max/1000))
+                    log(f"DELAY {delay:.3f}s (client -> server)")
                     time.sleep(delay)
 
                 # forward to server
@@ -91,14 +90,14 @@ def main():
 
                 # drop?
                 if random.randint(1, 100) <= args.server_drop:
-                    log("DROP (server→client)")
+                    log("DROP (server -> client)")
                     continue
 
                 # delay?
                 if args.server_delay:
-                    delay = random.uniform(args.server_delay_time_min,
-                                           args.server_delay_time_max)
-                    log(f"DELAY {delay:.3f}s (server→client)")
+                    delay = random.uniform((args.server_delay_time_min/1000),
+                                           (args.server_delay_time_max/1000))
+                    log(f"DELAY {delay:.3f}s (server -> client)")
                     time.sleep(delay)
 
                 # forward to client

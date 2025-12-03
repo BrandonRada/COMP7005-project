@@ -55,8 +55,11 @@ def main():
                 if pkt["flags"] & FLAG_ACK and pkt["ack"] == seq:
                     log(f"RECEIVED ACK for seq={seq}")
                     break # ACK is good, move on to next message
+                elif pkt["ack"] < seq:
+                    log(f"Ignoring stale ACK={pkt['ack']} (current seq={seq})")
+                    continue     # do NOT count as retry, just wait again for correct ACK
                 else:
-                    log(f"Invalid ACK received: {pkt}")
+                    log(f"Unexpected ACK received: {pkt}")
                     retries += 1
 
 

@@ -141,7 +141,7 @@ def plot_proxy_graph(file):
     labels = [
         "Dropped (total)", "Dropped (client)", "Dropped (server)",
         "Delayed (total)", "Delayed (client)", "Delayed (server)",
-        "Forwarded (total)", "Forwarded→Server", "Forwarded→Client"
+        "Forwarded (total)", "Forwarded -> Server", "Forwarded -> Client"
     ]
 
     values = [

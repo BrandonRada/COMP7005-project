@@ -1,8 +1,86 @@
-[2025-12-02 21:44:28] Client sending to 127.0.0.1:9001
-[2025-12-02 21:44:33] SENT | seq=1 retries=0 payload=b'hello server'
-[2025-12-02 21:44:33] RECEIVED ACK for seq=1
-[2025-12-02 21:44:33] Message seq=1 delivered
-[2025-12-02 21:44:41] SENT | seq=2 retries=0 payload=b's'
-[2025-12-02 21:44:41] RECEIVED ACK for seq=2
-[2025-12-02 21:44:41] Message seq=2 delivered
-[2025-12-02 21:44:51] Client stopped cleanly.
+[2025-12-02 22:36:27] Client sending to 127.0.0.1:4000
+[2025-12-02 22:36:40] SENT | seq=1 retries=0 payload=b'hello, lets see what goes through!'
+[2025-12-02 22:36:41] Error receiving ACK: timed out
+[2025-12-02 22:36:41] SENT | seq=1 retries=1 payload=b'hello, lets see what goes through!'
+[2025-12-02 22:36:42] Error receiving ACK: timed out
+[2025-12-02 22:36:42] SENT | seq=1 retries=2 payload=b'hello, lets see what goes through!'
+[2025-12-02 22:36:43] Error receiving ACK: timed out
+[2025-12-02 22:36:43] SENT | seq=1 retries=3 payload=b'hello, lets see what goes through!'
+[2025-12-02 22:36:44] Error receiving ACK: timed out
+[2025-12-02 22:36:44] SENT | seq=1 retries=4 payload=b'hello, lets see what goes through!'
+[2025-12-02 22:36:45] Error receiving ACK: timed out
+[2025-12-02 22:36:45] SENT | seq=1 retries=5 payload=b'hello, lets see what goes through!'
+[2025-12-02 22:36:46] Error receiving ACK: timed out
+[2025-12-02 22:36:46] FAILED to send message after 5 retries: seq=1
+[2025-12-02 22:36:57] SENT | seq=2 retries=0 payload=b'Oh no, didnt go through!'
+[2025-12-02 22:36:57] Ignoring stale ACK=1 (current seq=2)
+[2025-12-02 22:36:57] SENT | seq=2 retries=0 payload=b'Oh no, didnt go through!'
+[2025-12-02 22:36:57] Ignoring stale ACK=1 (current seq=2)
+[2025-12-02 22:36:57] SENT | seq=2 retries=0 payload=b'Oh no, didnt go through!'
+[2025-12-02 22:36:57] Ignoring stale ACK=1 (current seq=2)
+[2025-12-02 22:36:57] SENT | seq=2 retries=0 payload=b'Oh no, didnt go through!'
+[2025-12-02 22:36:58] Error receiving ACK: timed out
+[2025-12-02 22:36:58] SENT | seq=2 retries=1 payload=b'Oh no, didnt go through!'
+[2025-12-02 22:36:59] Error receiving ACK: timed out
+[2025-12-02 22:36:59] SENT | seq=2 retries=2 payload=b'Oh no, didnt go through!'
+[2025-12-02 22:37:00] Error receiving ACK: timed out
+[2025-12-02 22:37:00] SENT | seq=2 retries=3 payload=b'Oh no, didnt go through!'
+[2025-12-02 22:37:01] Error receiving ACK: timed out
+[2025-12-02 22:37:01] SENT | seq=2 retries=4 payload=b'Oh no, didnt go through!'
+[2025-12-02 22:37:02] Error receiving ACK: timed out
+[2025-12-02 22:37:02] SENT | seq=2 retries=5 payload=b'Oh no, didnt go through!'
+[2025-12-02 22:37:03] Error receiving ACK: timed out
+[2025-12-02 22:37:03] FAILED to send message after 5 retries: seq=2
+[2025-12-02 22:37:09] Client stopped cleanly.
+[2025-12-02 22:55:15] Client sending to 127.0.0.1:4000
+[2025-12-02 22:55:18] SENT | seq=1 retries=0 payload=b'hello'
+[2025-12-02 22:55:19] Error receiving ACK: timed out
+[2025-12-02 22:55:19] SENT | seq=1 retries=1 payload=b'hello'
+[2025-12-02 22:55:20] Error receiving ACK: timed out
+[2025-12-02 22:55:20] SENT | seq=1 retries=2 payload=b'hello'
+[2025-12-02 22:55:20] RECEIVED ACK for seq=1
+[2025-12-02 22:55:20] Message seq=1 delivered
+[2025-12-02 22:55:20] SENT | seq=2 retries=0 payload=b'hello'
+[2025-12-02 22:55:21] Error receiving ACK: timed out
+[2025-12-02 22:55:21] SENT | seq=2 retries=1 payload=b'hello'
+[2025-12-02 22:55:22] Error receiving ACK: timed out
+[2025-12-02 22:55:22] SENT | seq=2 retries=2 payload=b'hello'
+[2025-12-02 22:55:23] Error receiving ACK: timed out
+[2025-12-02 22:55:23] SENT | seq=2 retries=3 payload=b'hello'
+[2025-12-02 22:55:24] Error receiving ACK: timed out
+[2025-12-02 22:55:24] SENT | seq=2 retries=4 payload=b'hello'
+[2025-12-02 22:55:25] Error receiving ACK: timed out
+[2025-12-02 22:55:25] SENT | seq=2 retries=5 payload=b'hello'
+[2025-12-02 22:55:26] Error receiving ACK: timed out
+[2025-12-02 22:55:26] FAILED to send message after 5 retries: seq=2
+[2025-12-02 22:55:32] Client stopped cleanly.
+[2025-12-02 22:56:06] Client sending to 127.0.0.1:4000
+[2025-12-02 22:56:10] SENT | seq=1 retries=0 payload=b'hello'
+[2025-12-02 22:56:11] Error receiving ACK: timed out
+[2025-12-02 22:56:11] SENT | seq=1 retries=1 payload=b'hello'
+[2025-12-02 22:56:12] Error receiving ACK: timed out
+[2025-12-02 22:56:12] SENT | seq=1 retries=2 payload=b'hello'
+[2025-12-02 22:56:14] Error receiving ACK: timed out
+[2025-12-02 22:56:14] SENT | seq=1 retries=3 payload=b'hello'
+[2025-12-02 22:56:15] Error receiving ACK: timed out
+[2025-12-02 22:56:15] SENT | seq=1 retries=4 payload=b'hello'
+[2025-12-02 22:56:16] Error receiving ACK: timed out
+[2025-12-02 22:56:16] SENT | seq=1 retries=5 payload=b'hello'
+[2025-12-02 22:56:17] Error receiving ACK: timed out
+[2025-12-02 22:56:17] FAILED to send message after 5 retries: seq=1
+[2025-12-02 22:56:17] SENT | seq=2 retries=0 payload=b'chuddy'
+[2025-12-02 22:56:17] Ignoring stale ACK=1 (current seq=2)
+[2025-12-02 22:56:17] SENT | seq=2 retries=0 payload=b'chuddy'
+[2025-12-02 22:56:18] Error receiving ACK: timed out
+[2025-12-02 22:56:18] SENT | seq=2 retries=1 payload=b'chuddy'
+[2025-12-02 22:56:19] Error receiving ACK: timed out
+[2025-12-02 22:56:19] SENT | seq=2 retries=2 payload=b'chuddy'
+[2025-12-02 22:56:20] Error receiving ACK: timed out
+[2025-12-02 22:56:20] SENT | seq=2 retries=3 payload=b'chuddy'
+[2025-12-02 22:56:21] Error receiving ACK: timed out
+[2025-12-02 22:56:21] SENT | seq=2 retries=4 payload=b'chuddy'
+[2025-12-02 22:56:22] Error receiving ACK: timed out
+[2025-12-02 22:56:22] SENT | seq=2 retries=5 payload=b'chuddy'
+[2025-12-02 22:56:23] Error receiving ACK: timed out
+[2025-12-02 22:56:23] FAILED to send message after 5 retries: seq=2
+[2025-12-02 22:56:25] Client stopped cleanly.

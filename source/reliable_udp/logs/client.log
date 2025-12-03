@@ -1,0 +1,8 @@
+[2025-12-02 21:44:28] Client sending to 127.0.0.1:9001
+[2025-12-02 21:44:33] SENT | seq=1 retries=0 payload=b'hello server'
+[2025-12-02 21:44:33] RECEIVED ACK for seq=1
+[2025-12-02 21:44:33] Message seq=1 delivered
+[2025-12-02 21:44:41] SENT | seq=2 retries=0 payload=b's'
+[2025-12-02 21:44:41] RECEIVED ACK for seq=2
+[2025-12-02 21:44:41] Message seq=2 delivered
+[2025-12-02 21:44:51] Client stopped cleanly.

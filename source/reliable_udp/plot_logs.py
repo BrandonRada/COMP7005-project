@@ -1,154 +1,159 @@
+# plot_logs.py
 import matplotlib.pyplot as plt
 import re
 from datetime import datetime
+import os
 
-# --------------------------------------------
-# Time parser for log timestamps
-# --------------------------------------------
+# -------------------------------------------------
+# Helpers
+# -------------------------------------------------
 def parse_time(line):
     m = re.match(r"\[(.*?)\]", line)
     if not m:
         return None
-    ts = m.group(1)
     try:
-        return datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")
+        return datetime.strptime(m.group(1), "%Y-%m-%d %H:%M:%S")
     except:
         return None
 
-# --------------------------------------------
-# Parse client log (sent, ack, retries)
-# --------------------------------------------
-def parse_client_log(file):
-    events = []
+
+# -------------------------------------------------
+# CLIENT LOGS
+# -------------------------------------------------
+def parse_client(file):
+    sent = 0
+    acked = 0
+    retrans = 0
+
     with open(file, "r") as f:
         for line in f:
-            t = parse_time(line)
-            # SENT | seq=3 retries=2
-            m = re.search(r"SENT \| seq=(\d+) retries=(\d+)", line)
-            if m:
-                seq = int(m.group(1))
-                retries = int(m.group(2))
-                events.append(("sent", seq, retries, t))
+            if "SENT |" in line:
+                sent += 1
+                m = re.search(r"retries=(\d+)", line)
+                if m and int(m.group(1)) > 0:
+                    retrans += 1
 
-            # RECEIVED ACK for seq=3
-            m = re.search(r"ACK.*seq=(\d+)", line)
-            if m:
-                seq = int(m.group(1))
-                events.append(("ack", seq, None, t))
-    return events
+            if "RECEIVED ACK" in line:
+                acked += 1
 
-# --------------------------------------------
-# Parse proxy log (drops, delays, forwards)
-# --------------------------------------------
-def parse_proxy_log(file):
-    events = []
+    return sent, acked, retrans
+
+
+def plot_client_graph(file):
+    if not os.path.exists(file):
+        print(f"[plot] No client log exists: {file}")
+        return
+
+    sent, acked, retrans = parse_client(file)
+
+    plt.figure(figsize=(7, 5))
+    plt.bar(["Sent", "Acked", "Retransmissions"], [sent, acked, retrans])
+    plt.title("Client Summary Statistics")
+    plt.tight_layout()
+    plt.savefig("client_graph.png")
+    print("[plot] Saved client_graph.png")
+
+
+# -------------------------------------------------
+# SERVER LOGS
+# -------------------------------------------------
+def parse_server(file):
+    received = 0
     with open(file, "r") as f:
         for line in f:
-            t = parse_time(line)
+            if "RECEIVED" in line:
+                received += 1
+    return received
 
-            # DROP
+
+def plot_server_graph(file):
+    if not os.path.exists(file):
+        print(f"[plot] No server log exists: {file}")
+        return
+
+    received = parse_server(file)
+
+    plt.figure(figsize=(7, 5))
+    plt.bar(["Received"], [received])
+    plt.title("Server Summary Statistics")
+    plt.tight_layout()
+    plt.savefig("server_graph.png")
+    print("[plot] Saved server_graph.png")
+
+
+# -------------------------------------------------
+# PROXY LOGS
+# -------------------------------------------------
+import os
+import matplotlib.pyplot as plt
+
+def parse_proxy(file):
+    stats = {
+        "drops_total": 0,
+        "drops_client": 0,
+        "drops_server": 0,
+
+        "delays_total": 0,
+        "delays_client": 0,
+        "delays_server": 0,
+
+        "fwd_total": 0,
+        "fwd_to_server": 0,
+        "fwd_to_client": 0
+    }
+
+    with open(file, "r") as f:
+        for line in f:
+            # ---------------- DROP ----------------
             if "DROP" in line:
-                m = re.search(r"seq=(\d+)", line)
-                seq = int(m.group(1)) if m else None
-                events.append(("drop", seq, t))
+                stats["drops_total"] += 1
+                if "(client -> server)" in line:
+                    stats["drops_client"] += 1
+                elif "(server -> client)" in line:
+                    stats["drops_server"] += 1
 
-            # FORWARDED
-            elif "FORWARDED to server" in line or "FORWARDED to client" in line:
-                m = re.search(r"seq=(\d+)", line)
-                seq = int(m.group(1)) if m else None
-                events.append(("forward", seq, t))
-
-            # DELAY
+            # ---------------- DELAY ----------------
             if "DELAY" in line:
-                m = re.search(r"seq=(\d+)", line)
-                seq = int(m.group(1)) if m else None
-                events.append(("delay", seq, t))
+                stats["delays_total"] += 1
+                if "(client -> server)" in line:
+                    stats["delays_client"] += 1
+                elif "(server -> client)" in line:
+                    stats["delays_server"] += 1
 
-    return events
+            # ---------------- FORWARDED ----------------
+            if "FORWARDED" in line:
+                stats["fwd_total"] += 1
+                if "to server" in line:
+                    stats["fwd_to_server"] += 1
+                elif "to client" in line:
+                    stats["fwd_to_client"] += 1
 
-# --------------------------------------------
-# Parse server log (received)
-# --------------------------------------------
-def parse_server_log(file):
-    events = []
-    with open(file, "r") as f:
-        for line in f:
-            t = parse_time(line)
-            m = re.search(r"seq=(\d+)", line)
-            if m:
-                seq = int(m.group(1))
-                events.append(("recv", seq, t))
-    return events
+    return stats
 
-# --------------------------------------------
-# Load everything
-# --------------------------------------------
-client_events = parse_client_log("./logs/client.log")
-proxy_events = parse_proxy_log("./logs/proxy.log")
-server_events = parse_server_log("./logs/server.log")
 
-# --------------------------------------------
-# Build summary numbers
-# --------------------------------------------
-sent_count = len([e for e in client_events if e[0] == "sent"])
-ack_count = len([e for e in client_events if e[0] == "ack"])
-drops = len([e for e in proxy_events if e[0] == "drop"])
-delays = len([e for e in proxy_events if e[0] == "delay"])
+def plot_proxy_graph(file):
+    if not os.path.exists(file):
+        print(f"[plot] No proxy log exists: {file}")
+        return
 
-# Retransmissions = number of nonzero retries
-retransmissions = sum(1 for e in client_events if e[0]=="sent" and e[2] > 0)
+    s = parse_proxy(file)
 
-# --------------------------------------------
-# GRAPH 1 — Summary Bar Chart
-# --------------------------------------------
-plt.figure(figsize=(8, 5))
-labels = ["Sent", "Acked", "Dropped", "Delayed", "Retransmissions"]
-vals = [sent_count, ack_count, drops, delays, retransmissions]
-plt.bar(labels, vals)
-plt.title("Reliable UDP Summary Statistics")
-plt.xlabel("Event Type")
-plt.ylabel("Count")
-plt.tight_layout()
-plt.show()
+    labels = [
+        "Dropped (total)", "Dropped (client)", "Dropped (server)",
+        "Delayed (total)", "Delayed (client)", "Delayed (server)",
+        "Forwarded (total)", "Forwarded→Server", "Forwarded→Client"
+    ]
 
-# --------------------------------------------
-# GRAPH 2 — Timeline view of packet journey
-# --------------------------------------------
-plt.figure(figsize=(12, 6))
+    values = [
+        s["drops_total"], s["drops_client"], s["drops_server"],
+        s["delays_total"], s["delays_client"], s["delays_server"],
+        s["fwd_total"], s["fwd_to_server"], s["fwd_to_client"]
+    ]
 
-# SENT packets
-sent_events = [(seq, t) for (kind, seq, retries, t) in client_events if kind == "sent"]
-for seq, t in sent_events:
-    plt.scatter(t, seq, color="blue", s=60)
-
-# ACK events
-ack_events = [(seq, t) for (kind, seq, retries, t) in client_events if kind == "ack"]
-for seq, t in ack_events:
-    plt.scatter(t, seq, color="green", marker='D', s=70)
-
-# DROPS (proxy)
-drop_events = [(seq, t) for (kind, seq, t) in proxy_events if kind == "drop"]
-for seq, t in drop_events:
-    plt.scatter(t, seq, color="red", marker='x', s=80)
-
-# DELAYS (proxy)
-delay_events = [(seq, t) for (kind, seq, t) in proxy_events if kind == "delay"]
-for seq, t in delay_events:
-    plt.scatter(t, seq, color="orange", marker='s', s=70)
-
-# Add legend elements (clean, no duplicates)
-from matplotlib.lines import Line2D
-legend_elements = [
-    Line2D([0], [0], marker='o', color='w', markerfacecolor='blue', markersize=8, label='Sent'),
-    Line2D([0], [0], marker='D', color='w', markerfacecolor='green', markersize=8, label='ACK'),
-    Line2D([0], [0], marker='x', color='red', markersize=8, label='Drop'),
-    Line2D([0], [0], marker='s', color='orange', markersize=8, label='Delay'),
-]
-
-plt.legend(handles=legend_elements)
-
-plt.title("Packet Timeline Visualization")
-plt.xlabel("Time")
-plt.ylabel("Sequence Number")
-plt.tight_layout()
-plt.show()
+    plt.figure(figsize=(10, 6))
+    plt.bar(labels, values)
+    plt.title("Proxy Summary Statistics")
+    plt.xticks(rotation=30, ha="right")
+    plt.tight_layout()
+    plt.savefig("proxy_graph.png")
+    print("[plot] Saved proxy_graph.png")

@@ -1,9 +1,11 @@
 import socket
 import argparse
 import sys
+import threading
 
 from common import decode_packet, encode_ack
 from logger import make_logger
+from plot_logs import plot_server_graph
 
 def main():
     parser = argparse.ArgumentParser()
@@ -65,6 +67,7 @@ def main():
     print("\nClosing socket...")
     sock.close()
     log("Server stopped cleanly.")
+    plot_server_graph("./logs/server.log")
 
 if __name__ == "__main__":
     main()

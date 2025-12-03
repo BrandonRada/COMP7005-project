@@ -3,9 +3,12 @@ import sys
 import argparse
 import random
 import time
+import threading
 
 
 from logger import make_logger
+from plot_logs import plot_proxy_graph
+
 
 
 def main():
@@ -111,6 +114,7 @@ def main():
     finally:
         sock.close()
         log("Proxy closed cleanly.")
+        plot_proxy_graph("./logs/proxy.log")
 
 if __name__ == "__main__":
     main()
